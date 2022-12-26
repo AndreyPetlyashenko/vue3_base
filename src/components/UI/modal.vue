@@ -1,6 +1,6 @@
 <template>
-    <div class="modal_container" v-if="show">
-        <div class="content">
+    <div class="modal_container" v-if="show" @click="hideModal">
+        <div class="content" @click.stop>
             <slot></slot>
         </div>
     </div>
@@ -11,7 +11,12 @@ export default {
     props: {
         show: Boolean
     },
-    name: "my-modal"
+    name: "my-modal",
+    methods: {
+        hideModal() {            
+            this.$emit('update:show', false)
+        }
+    }
 }
 </script>
 
@@ -28,5 +33,9 @@ export default {
 
 .content {
     margin: auto;
+    background-color: white;
+    border-radius: 12px;
+    padding: 10px;
+
 }
 </style>

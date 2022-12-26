@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input :value='modelValue' :type=input_type @input="updateHandler">
+        <input :value='modelValue' :type=input_type @input="updateHandler" :placeholder="placeholder">
     </div>
 </template>
 
@@ -9,7 +9,11 @@ export default {
     name: 'my-input',
     props: {
         input_type: String,
-        modelValue: [String, Number]
+        modelValue: [String, Number],
+        placeholder: {
+            type: String,
+            required: true
+        }
     },
     methods: {
         updateHandler(e: any) {

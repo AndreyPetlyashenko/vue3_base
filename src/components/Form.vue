@@ -6,8 +6,8 @@
                 v-model="message" -- standart model with 'modelValue'
                 v-model:value="message" -- model for any atribute for exmpl -  'value' 
             -->
-            <my-input v-model="message" :input_type="'text'" />
-            <my-input v-model="date" :input_type="'text'" />
+            <my-input v-model="message" :input_type="'text'" :placeholder="'msg...required'"/>
+            <my-input v-model="date" :input_type="'text'" :placeholder="'date...required'"/>
 
             <my-button @click.prevent="createPost" :style="{
                 marginLeft: '15px',
@@ -27,7 +27,7 @@ export default {
     methods: {
         createPost() {
             const post = { msg: this.message, date: this.date };
-            this.$emit("make-post", post);
+            this.message && this.date && this.$emit("make-post", post);
             this.message = "";
             this.date = "";
         },

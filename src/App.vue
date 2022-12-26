@@ -10,14 +10,21 @@ export default {
         { msg: 'msg1414121', date: '17.12.1990' },
         { msg: 'msg11412412', date: '17.12.1990' }
       ],
-      show:false
+      show_modal: false
 
     }
   },
   methods: {
     postHandler(post: any) {
       this.lists.push(post)
-      this.show=false
+      this.show_modal = false
+    },
+    showModal(){
+      console.log('cliked',  this.show_modal)
+      this.show_modal=true
+    },
+    removeHandler(id){
+      this.lists.splice(id, 1)
     }
   },
   components: {
@@ -29,14 +36,14 @@ export default {
 </script>
 
 <template>
-  <my-button @click="show=!show">
+  <my-button @click="showModal">
     make a new post
   </my-button>
-  <my-modal :show=show>
+  <my-modal    v-model:show="show_modal" >
     <Form @make-post="postHandler"></Form>
   </my-modal>
 
-  <List :posts="lists"></List>
+  <List :posts="lists" @remove_post="removeHandler"></List>
   <h4>Total: {{ lists.length }}</h4>
 
 </template>

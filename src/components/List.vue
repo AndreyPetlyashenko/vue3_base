@@ -2,13 +2,17 @@
 <template>
     <div>
         <h1>List:</h1>
-        <ul>
+
+        <ul v-if="posts.length > 0">
             <li v-for="post, index in posts" :key="index" class="list_item">
                 <h3>{{ post.msg }}</h3>
                 <h3>{{ post.date }}</h3>
-                <my-button>delete</my-button>
+                <my-button @click="removePost(index)">delete</my-button>
             </li>
         </ul>
+        <div v-else="posts.length===0">
+            <h2>empty list</h2>
+        </div>
     </div>
 
 </template>
@@ -18,6 +22,11 @@
 export default {
     props: {
         posts: Array<any>
+    },
+    methods: {
+        removePost(id) {
+            this.$emit('remove_post', id)
+        }
     }
 }
 </script>
