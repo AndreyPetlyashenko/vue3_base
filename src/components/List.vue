@@ -2,24 +2,25 @@
 <template>
     <div>
         <h1>List:</h1>
-
         <ul v-if="posts.length > 0">
-            <li v-for="post, index in posts" :key="index" class="list_item">
-                <h3>{{ post.msg }}</h3>
-                <h3>{{ post.date }}</h3>
-                <my-button @click="removePost(index)">delete</my-button>
-            </li>
+            <TransitionGroup name="list" >
+                <li v-for="post in posts" :key="post.id" class="list_item">
+                    <p><strong>{{ post.title }}</strong></p>
+                    <p>{{ post.body }}</p>
+                    <my-button @click="removePost(post.id)">delete</my-button>
+                </li>
+            </TransitionGroup>
         </ul>
         <div v-else="posts.length===0">
             <h2>empty list</h2>
         </div>
     </div>
-
 </template>
 
 
 <script lang="ts">
 export default {
+    name: 'my-list',
     props: {
         posts: Array<any>
     },
@@ -40,5 +41,19 @@ export default {
     justify-content: space-between;
     padding: 5px;
     border-radius: 10px;
+}
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(130px);
+}
+.list-move{
+    transition: transform 0.8s ease;
 }
 </style>

@@ -20,13 +20,14 @@
 
 <script lang="ts">
 export default {
+    name:'my-form',
     data: () => ({
         message: "",
         date: "",
     }),
     methods: {
         createPost() {
-            const post = { msg: this.message, date: this.date };
+            const post = { title: this.message, body: this.date };            
             this.message && this.date && this.$emit("make-post", post);
             this.message = "";
             this.date = "";
