@@ -11,7 +11,12 @@ export default {
         { name: 'on title', value: 'title' },
         { name: 'on body', value: 'body' },
       ],
-      selectedSort: ''
+      selectedSort: '',
+      searchQuery: '',
+
+      limit: 10,
+      page: 1,
+      maxPages: 0
     }
   },
   methods: {
@@ -23,12 +28,18 @@ export default {
     showModal() {
       this.show_modal = true
     },
-    removeHandler(id:string) {
+    removeHandler(id: string) {
       this.lists = this.lists.filter(post => post.id != id)
     },
     async getPosts() {
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _limit: this.limit,
+            _page: this.page
+          }
+        })
+        this.maxPages = Math.ceil(response.headers['x-total-count'] / this.limit)
         this.lists = response.data
       } catch (error) {
         console.log(error)
@@ -36,21 +47,30 @@ export default {
         this.isPostLoaded = true
       }
     },
+
+
   },
   mounted() {
     this.getPosts();
   },
-  // watch: {
-  //   selectedOption(newList) {
-  //     // name of the function should be same as v-model. 
-  //     // The func run when its argument changed (useEffect)
-  //     this.lists.sort((post1: any, post2: any) => post1[newList].localeCompare(post2[newList]))
-  //   }
-  //   // To track objects we need use option deep:true// exmpl: selectedOption:{handler(objct){},deep:true}
-  // },
+  watch: {
+    // selectedSort(newList) {
+    // name of the function should be same as v-model. 
+    // The func run when its argument changed (useEffect)
+    // this.lists.sort((post1: any, post2: any) => post1[newList].localeCompare(post2[newList]))
+    // }
+    // To track objects we need use option deep:true// exmpl: selectedOption:{handler(objct){},deep:true}
+
+    page() {
+      this.getPosts();
+    }
+  },
   computed: {
     sortedPosts() { //like useMemo. same func like above
       return [...this.lists].sort((post1: any, post2: any) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+    },
+    searchedSortedPosts() {
+      return this.sortedPosts.filter((post) => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
     }
   },
 
@@ -60,19 +80,28 @@ export default {
 
 <template>
 
-  <my-sorting :options="sortingOptions" v-model:selectedSort="selectedSort"></my-sorting>
+  <my-input placeholder="search..." v-model="searchQuery" />
 
-  <my-button @click="showModal">
-    make a new post
-  </my-button>
+  <div class="flex_container">
+    <my-button @click="showModal">
+      make a new post
+    </my-button>
+    <my-sorting :options="sortingOptions" v-model:selectedSort="selectedSort"></my-sorting>
+  </div>
+
+
   <my-modal v-model:show="show_modal">
     <my-form @make-post="postHandler"></my-form>
   </my-modal>
+
   <div v-if="!isPostLoaded">
     <h1>Loading..</h1>
   </div>
-  <my-list :posts="sortedPosts" @remove_post="removeHandler"></my-list>
-  <h4>Total: {{ lists.length }}</h4>
+
+  <my-list :posts="searchedSortedPosts" @remove_post="removeHandler"></my-list>
+
+  <my-pagination :maxPages="maxPages" v-model:active_page="page" />
+
 
 </template>
 
@@ -80,5 +109,10 @@ export default {
 .title {
   font-size: 80px;
   text-align: center;
+}
+
+.flex_container {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

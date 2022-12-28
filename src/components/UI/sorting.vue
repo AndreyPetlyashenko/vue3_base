@@ -1,6 +1,4 @@
 <template>
-
-    <h2>Sorting</h2>
     <select @change="selectHandler">
         <option disabled selected>Choose option</option>
         <option :value="option.value" :key="option.value" v-for="option in (options as Array<{ [key: string]: any }>)">
