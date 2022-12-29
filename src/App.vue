@@ -14,9 +14,12 @@ export default {
       selectedSort: '',
       searchQuery: '',
 
+      //pagination
       limit: 10,
       page: 1,
       maxPages: 0
+
+
     }
   },
   methods: {
@@ -31,7 +34,23 @@ export default {
     removeHandler(id: string) {
       this.lists = this.lists.filter(post => post.id != id)
     },
-    async getPosts() {
+    // async getPosts() {
+    //   try {
+    //     const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+    //       params: {
+    //         _limit: this.limit,
+    //         _page: this.page
+    //       }
+    //     })
+    //     this.maxPages = Math.ceil(response.headers['x-total-count'] / this.limit)
+    //     this.lists = response.data
+    //   } catch (error) {
+    //     console.log(error)
+    //   } finally {
+    //     this.isPostLoaded = true
+    //   }
+    // },
+    async GetLazyPost() {
       try {
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
           params: {
@@ -40,7 +59,7 @@ export default {
           }
         })
         this.maxPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-        this.lists = response.data
+        this.lists = [...this.lists, ...response.data]
       } catch (error) {
         console.log(error)
       } finally {
@@ -48,10 +67,25 @@ export default {
       }
     },
 
-
   },
   mounted() {
     this.getPosts();
+
+    const options = {
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+    const lazyLoad = (entries) => {
+      if (entries[0].isIntersecting && this.maxPages > this.page) {
+        this.page+=1
+        this.GetLazyPost()
+      }
+
+    }
+
+    let observer = new IntersectionObserver(lazyLoad, options);
+    const target = this.$refs.observer as Element;
+    observer.observe(target);
   },
   watch: {
     // selectedSort(newList) {
@@ -61,9 +95,10 @@ export default {
     // }
     // To track objects we need use option deep:true// exmpl: selectedOption:{handler(objct){},deep:true}
 
-    page() {
-      this.getPosts();
-    }
+    // !Pagination!
+    // page() {
+    //   this.getPosts();
+    // }
   },
   computed: {
     sortedPosts() { //like useMemo. same func like above
@@ -100,7 +135,8 @@ export default {
 
   <my-list :posts="searchedSortedPosts" @remove_post="removeHandler"></my-list>
 
-  <my-pagination :maxPages="maxPages" v-model:active_page="page" />
+  <div class="observer" ref="observer"></div>
+  <!-- <my-pagination :maxPages="maxPages" v-model:active_page="page" /> -->
 
 
 </template>
@@ -114,5 +150,10 @@ export default {
 .flex_container {
   display: flex;
   justify-content: space-between;
+}
+
+.observer {
+  height: 30px;
+  background-color: green;
 }
 </style>
