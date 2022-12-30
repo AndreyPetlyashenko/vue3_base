@@ -1,13 +1,16 @@
 
 <template>
     <div>
-        <h1>List:</h1>
         <ul v-if="posts.length > 0">
-            <TransitionGroup name="list" >
+            <TransitionGroup name="list">
                 <li v-for="post in posts" :key="post.id" class="list_item">
                     <p><strong>{{ post.title }}</strong></p>
                     <p>{{ post.body }}</p>
-                    <my-button @click="removePost(post.id)">delete</my-button>
+                    <div>
+                        <my-button @click="$router.push(`/posts/${post.id}`)">Open post</my-button>
+                        <my-button @click="removePost(post.id)">Delete</my-button>
+                    </div>
+
                 </li>
             </TransitionGroup>
         </ul>
@@ -33,6 +36,10 @@ export default {
 </script>
 
 <style scoped>
+ul {
+    margin-top: 50px;
+}
+
 .list_item {
     border: 1px solid green;
     margin-top: 15px;
@@ -53,7 +60,8 @@ export default {
     opacity: 0;
     transform: translateX(130px);
 }
-.list-move{
+
+.list-move {
     transition: transform 0.8s ease;
 }
 </style>

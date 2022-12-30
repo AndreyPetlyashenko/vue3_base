@@ -29,7 +29,7 @@ input {
     border: 1px solid green;
     border-radius: 10px;
     padding: 10px;
-    margin: 10px;
+    margin: 10px 0;
     width: 100vh;
 }
 </style>
