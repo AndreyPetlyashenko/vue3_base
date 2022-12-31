@@ -23,11 +23,6 @@ export default {
     }
   },
   methods: {
-    handlerTest(){
-      this.page+=1
-    }
-
-    ,
     postHandler(post: { [key: string]: any }) {
       post.id = this.lists.length + 1
       this.lists.push(post)
@@ -55,17 +50,22 @@ export default {
     //     this.isPostLoaded = true
     //   }
     // },
-    async GetLazyPost(page: number) {
+    async GetLazyPost() {
       try {
+       
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
           params: {
             _limit: this.limit,
-            _page: page || this.page
+            _page: this.page
           }
         })
+       
         this.maxPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-        this.page+=1
+       
+        this.page += 1
+       
         this.lists = [...this.lists, ...response.data]
+
       } catch (error) {
         console.log(error)
       } finally {
@@ -74,9 +74,9 @@ export default {
     },
 
   },
-  // mounted() {
-  //   this.GetLazyPost(this.page);
-  // },
+  mounted() {
+    this.GetLazyPost();
+  },
   watch: {
     // selectedSort(newList) {
     // name of the function should be same as v-model. 
@@ -118,16 +118,13 @@ export default {
   <my-modal v-model:show="show_modal">
     <my-form @make-post="postHandler"></my-form>
   </my-modal>
-
   <div v-if="!isPostLoaded">
     <h1>Loading..</h1>
-    <button @click="handlerTest">page</button>
-    <h1>{{ page }}</h1>
   </div>
 
   <my-list :posts="searchedSortedPosts" @remove_post="removeHandler"></my-list>
 
-  <div class="observer"   v-intersection:[page]="page"></div>
+  <div class="observer" v-show="this.page<=this.maxPages" v-intersection="{ GetLazyPost }"></div>
   <!-- <my-pagination :maxPages="maxPages" v-model:active_page="page" /> -->
 
 

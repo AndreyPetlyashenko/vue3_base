@@ -5,31 +5,22 @@ export default {
 
     mounted(el, binding) {
 
-        console.log({ binding });
+        let { GetLazyPost } = binding.value
 
-        // let { GetLazyPost, page, maxPages } = binding.value
+        const options = {
+            rootMargin: '0px',
+            threshold: 1.0
+        }
+        const lazyLoad = (entries) => {
+            //To do/// page is not changing//
+            if (entries[0].isIntersecting) {
+                GetLazyPost()
+            }
+        }
 
-        // const options = {
-        //     rootMargin: '0px',
-        //     threshold: 1.0
-        // }
+        let observer = new IntersectionObserver(lazyLoad, options);
+        observer.observe(el);
+    },
 
-        // const lazyLoad = (entries) => {
-        //     //To do/// page is not changing//
-
-
-        //     if (entries[0].isIntersecting) {
-
-
-        //         GetLazyPost()
-        //     }
-
-        // }
-
-        // let observer = new IntersectionObserver(lazyLoad, options);
-
-        // observer.observe(el);
-
-    }
 }
 </script>
