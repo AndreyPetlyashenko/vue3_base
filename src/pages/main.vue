@@ -1,16 +1,9 @@
 <template>
-    <div>
-        <h1>Home Page</h1>
-
-    </div>
+  <div>
+    <h1>Home Page</h1>
+  </div>
 </template>
 
 <script lang="ts">
-export default {
-
-}
+export default {};
 </script>
-
-<style scoped>
-
-</style>

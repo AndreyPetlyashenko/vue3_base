@@ -2,7 +2,7 @@ export default {
   name: "intersection",
 
   mounted(el, binding) {
-    let { GetLazyPost } = binding.value;
+    const { GetLazyPost } = binding.value;
 
     const options = {
       rootMargin: "0px",
@@ -14,7 +14,7 @@ export default {
       }
     };
 
-    let observer = new IntersectionObserver(lazyLoad, options);
+    const observer = new IntersectionObserver(lazyLoad, options);
     observer.observe(el);
   }
 };

@@ -1,7 +1,7 @@
 import main from "@/pages/main.vue";
-import about from '@/pages/about.vue'
-import userPage from '@/pages/postPage.vue'
-import post_details from '@/pages/post_details.vue'
+import about from "@/pages/about.vue";
+import userPage from "@/pages/postPage.vue";
+import post_details from "@/pages/post_details.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 
 const routes = [
