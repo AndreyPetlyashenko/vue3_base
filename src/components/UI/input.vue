@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <input :value='modelValue' :type=input_type @input="updateHandler" :placeholder="placeholder">
-    </div>
+
+    <input :value='modelValue' :type=input_type @input="updateHandler" :placeholder="placeholder">
+
 </template>
 
 <script lang="ts">

@@ -6,7 +6,7 @@
                 v-model="message" -- standart model with 'modelValue'
                 v-model:value="message" -- model for any atribute for exmpl -  'value' 
             -->
-            <my-input v-model="message" :input_type="'text'" :placeholder="'msg...required'"/>
+            <my-input v-model="message" :input_type="'text'" :placeholder="'msg...required'"  v-focus/>
             <my-input v-model="date" :input_type="'text'" :placeholder="'date...required'"/>
 
             <my-button @click.prevent="createPost" :style="{

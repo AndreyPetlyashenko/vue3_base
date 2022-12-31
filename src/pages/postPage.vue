@@ -105,7 +105,7 @@ export default {
 
 <template>
 
-  <my-input placeholder="search..." v-model="searchQuery" />
+  <my-input placeholder="search..." v-model="searchQuery" v-focus />
 
   <div class="flex_container">
     <my-button @click="showModal">
